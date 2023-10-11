@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+
+    parameters {
+        booleanParam(name: 'autoApprove', defaultValue: false, description: '¿Ejecutar automáticamente la aplicación?')
+        choice(name: 'action', choices: ['apply', 'destroy'], description: 'Seleccione la acción que desea realizar')
+    }
+
+      environment {
+            AZURE_CLIENT_ID       = credentials('azure-client-id')
+            AZURE_CLIENT_SECRET   = credentials('azure-client-secret')
+            AZURE_TENANT_ID       = credentials('azure-tenant-id') 
+    }
+    stages {
+        stage('stage_build') {
+            steps {
+                git branch: 'main', url: 'https://github.com/BorisTravi/retomibancoboristravi.git'
+            }
+        }
+        stage('Terraform init') {
+            steps {
+                sh 'terraform init'
+            }
+        }
+        stage('Plan') {
+            steps {
+                sh 'terraform plan -out tfplan'
+                sh 'terraform show -no-color tfplan > tfplan.txt'
+            }
+        }
+        stage('stage_deploy_dev') {
+            steps {
+                script {
+                    if (params.action == 'apply') {
+                        if (!params.autoApprove) {
+                            def plan = readFile 'tfplan.txt'
+                            input message: "¿Quieres aplicar el plan?",
+                            parameters: [text(name: 'Plan', description: 'Por favor, revise el plan', defaultValue: plan)]
+                        }
+
+                        sh 'terraform ${action} -input=false tfplan'
+                    } else if (params.action == 'destroy') {
+                        sh 'terraform ${action} --auto-approve'
+                    } else {
+                        error "Se ha seleccionado una acción no válida. Por favor, elija 'aplicar' o 'destruir'."
+                    }
+                }
+            }
+        }
+
+    }
+}
