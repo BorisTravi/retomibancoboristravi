@@ -20,13 +20,22 @@ pipeline {
                     }
                 }
             }
-        stage('Plan') {
-            steps {
-                cd 'pwd;cd terraform/ ; terraform init'
-                cd 'pwd;cd terraform/ ; terraform plan -out tfplan'
-                cd 'pwd;cd terraform/ ; terraform show -no-color tfplan > tfplan.txt'
+    stage('Plan') {
+        steps {
+            script {
+                def currentDir = sh(returnStdout: true, script: 'pwd').trim()  // Obtiene la ruta actual
+
+                echo "El directorio actual es: ${currentDir}"
+
+                def terraformDir = "${currentDir}/terraform"  // Ruta completa al directorio Terraform
+                echo "La ruta completa del directorio Terraform es: ${terraformDir}"
+
+                sh "cd ${terraformDir}; terraform init"
+                sh "cd ${terraformDir}; terraform plan -out tfplan"
+                sh "cd ${terraformDir}; terraform show -no-color tfplan > tfplan.txt"
             }
         }
+    }
 
         stage('Approval') {
            when {
