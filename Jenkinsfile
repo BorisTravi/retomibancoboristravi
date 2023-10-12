@@ -21,20 +21,20 @@ pipeline {
                 }
             }
 
- stage('Plan') {
-    steps {
-        script {
-            def terraformDir = env.TERRAFORM_DIR  // Obtiene la ruta del directorio Terraform desde la variable de entorno
-            if (terraformDir) {
-                sh "cd ${terraformDir}; terraform init"
-                sh "cd ${terraformDir}; terraform plan -out tfplan"
-                sh "cd ${terraformDir}; terraform show -no-color tfplan > tfplan.txt"
-            } else {
-                error "La variable TERRAFORM_DIR no está configurada. Especifícala en la configuración del trabajo."
+    stage('Plan') {
+        steps {
+            script {
+                def terraformDir = env.TERRAFORM_DIR  // Obtiene la ruta del directorio Terraform desde la variable de entorno
+                if (terraformDir) {
+                    sh "cd ${terraformDir}; terraform init"
+                    sh "cd ${terraformDir}; terraform plan -out tfplan"
+                    sh "cd ${terraformDir}; terraform show -no-color tfplan > tfplan.txt"
+                } else {
+                    error "La variable TERRAFORM_DIR no está configurada. Especifícala en la configuración del trabajo."
+                }
             }
         }
     }
-}
 
         stage('Approval') {
            when {
