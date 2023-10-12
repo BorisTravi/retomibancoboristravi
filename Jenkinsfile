@@ -20,7 +20,7 @@ pipeline {
                     }
                 }
             }
-    stage('plan') {
+    stage('Plan') {
         steps {
             script {
                 def currentDir = sh(returnStdout: true, script: 'pwd').trim()  // Obtiene la ruta actual
