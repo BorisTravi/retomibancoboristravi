@@ -15,7 +15,7 @@ pipeline {
                  script{
                         dir("terraform")
                         {
-                            git "https://github.com/BorisTravi/retomibancoboristravi.git"
+                            git 'https://github.com/BorisTravi/retomibancoboristravi.git'
                         }
                     }
                 }
@@ -23,8 +23,8 @@ pipeline {
 
         stage('Plan') {
             steps {
-                sh 'terraform init'
-                sh "pwd;cd terraform/ ; terraform plan -out tfplan"
+                sh 'pwd;cd terraform/ ; terraform init'
+                sh 'pwd;cd terraform/ ; terraform plan -out tfplan'
                 sh 'pwd;cd terraform/ ; terraform show -no-color tfplan > tfplan.txt'
             }
         }
