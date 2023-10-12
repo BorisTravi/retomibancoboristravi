@@ -8,7 +8,14 @@ pipeline {
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
     }
 
+<<<<<<< HEAD
    agent  any
+=======
+      environment {
+            AZURE_CLIENT_ID       = credentials('AZURE_CLIENT_ID')
+            AZURE_CLIENT_SECRET   = credentials('AZURE_CLIENT_SECRET')
+    }
+>>>>>>> 9b5eb0116d397b7334f33fa781d04f1d6415910d
     stages {
         stage('checkout') {
             steps {
@@ -50,5 +57,9 @@ pipeline {
             }
         }
     }
+<<<<<<< HEAD
 
   }
+=======
+}
+>>>>>>> 9b5eb0116d397b7334f33fa781d04f1d6415910d
