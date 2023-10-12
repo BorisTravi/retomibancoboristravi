@@ -1,11 +1,11 @@
 pipeline {
 
     parameters {
-        booleanParam(name: 'autoApprove', defaultValue: false, description: '¿Ejecutar automáticamente la solicitud después de generar el plan?')
+        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
     } 
     environment {
-        AZURE_CLIENT_ID         = credentials('AZURE_CLIENT_ID')
-        AZURE_CLIENT_SECRET     = credentials('AZURE_CLIENT_SECRET')
+        AZURE_CLIENT_ID     = credentials('AZURE_CLIENT_ID')
+        AZURE_CLIENT_SECRET = credentials('AZURE_CLIENT_SECRET')
     }
 
    agent  any
@@ -15,7 +15,7 @@ pipeline {
                  script{
                         dir("terraform")
                         {
-                            git "https://github.com/BorisTravi/retomibancoboristravi.git"
+                            git "https://github.com/yeshwanthlm/Terraform-Jenkins.git"
                         }
                     }
                 }
@@ -38,8 +38,8 @@ pipeline {
            steps {
                script {
                     def plan = readFile 'terraform/tfplan.txt'
-                    input message: "¿Quieres aplicar el plan?",
-                    parameters: [text(name: 'Plan', description: 'Por favor revise el plan', defaultValue: plan)]
+                    input message: "Do you want to apply the plan?",
+                    parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
                }
            }
        }
