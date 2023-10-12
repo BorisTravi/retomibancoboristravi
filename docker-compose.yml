@@ -7,10 +7,11 @@ services:
       - "8001:8080"
       - "5001:50000"
     volumes:
-      - jenkins_home:/var/Jenkins_home
+      - jenkins_home:/var/jenkins_home
     restart: always
     networks:
       - net_jenkins
+    command: /bin/sh -c "apk update && apk add terraform=3 && /sbin/tini -- /usr/local/bin/jenkins.sh"
 volumes:
   jenkins_home:
 networks:
