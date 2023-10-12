@@ -1,7 +1,7 @@
 pipeline {
 
     parameters {
-        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
+        booleanParam(name: 'autoApprove', defaultValue: false, description: '¿Ejecutar automáticamente la solicitud después de generar el plan?')
     } 
     environment {
         AZURE_CLIENT_ID     = credentials('AZURE_CLIENT_ID')
@@ -10,7 +10,7 @@ pipeline {
 
    agent  any
     stages {
-        stage('checkout') {
+        stage('Verificar') {
             steps {
                  script{
                         dir("terraform")
@@ -37,7 +37,7 @@ pipeline {
         }
     }
 
-        stage('Approval') {
+        stage('Aprobacion') {
            when {
                not {
                    equals expected: true, actual: params.autoApprove
@@ -47,8 +47,8 @@ pipeline {
            steps {
                script {
                     def plan = readFile 'terraform/tfplan.txt'
-                    input message: "Do you want to apply the plan?",
-                    parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
+                    input message: "¿Quieres aplicar el plan?",
+                    parameters: [text(name: 'Plan', description: 'Por favor revise el plan', defaultValue: plan)]
                }
            }
        }
