@@ -1,7 +1,7 @@
 pipeline {
 
     parameters {
-        booleanParam(name: 'autoApprove', defaultValue: false, description: '¿Ejecutar automáticamente la solicitud después de generar el plan?')
+        booleanParam(name: 'Aprobación automática', defaultValue: false, description: '¿Ejecutar automáticamente la solicitud después de generar el plan?')
     } 
     environment {
         AZURE_CLIENT_ID     = credentials('AZURE_CLIENT_ID')
@@ -53,7 +53,7 @@ pipeline {
            }
        }
 
-        stage('Apply') {
+        stage('Aplicando') {
             steps {
                 sh "pwd;cd terraform/ ; terraform apply -input=false tfplan"
             }
